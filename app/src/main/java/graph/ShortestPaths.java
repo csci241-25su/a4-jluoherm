@@ -1,6 +1,10 @@
 package graph;
+/*
+ * Author: James Luo-Hermanson
+ * Date: 08/16/2025
+ * TODO Purpose:
+ */
 
-import heap.Heap;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,11 +33,44 @@ public class ShortestPaths {
      * backpointer to the previous node on the shortest path.
      * Precondition: origin is a node in the Graph.*/
     public void compute(Node origin) {
-        paths = new HashMap<Node,PathData>();
+        paths = new HashMap<>();
+        Heap<Node,Double> h = new Heap<>();
 
-        // TODO 1: implement Dijkstra's algorithm to fill paths with
-        // shortest-path data for each Node reachable from origin.
+        h.add(origin,0.0);
+        paths.put(origin,new PathData(0.0,null));
 
+        while (h.size() > 0) {
+            Node f = h.poll();
+            boolean vHasNeighbor = !f.getNeighbors().isEmpty();
+
+            //Search through each neighbor w of f
+            if (vHasNeighbor) {
+                f.getNeighbors().forEach((w,value) -> {
+                    //Set variables for weight(distance) between f and w
+                    //and distance of f from origin
+                    double f_w_dist = value;
+                    double f_dist_origin = paths.get(f).distance;
+                    //Check if neighbor in frontier (heap) or settled set (paths)
+                    boolean inSorF = h.contains(w) || paths.containsKey(w);
+                    //Set distance from origin to w
+                    double w_dist_origin = f_w_dist + f_dist_origin;
+
+                    if (!inSorF) {
+                        //Add neighbor w to Frontier and paths
+                        paths.put(w,new PathData(w_dist_origin,f));
+                        h.add(w,w_dist_origin);
+                    /* If w already in F or paths, check if distance between origin and f
+                    and between f and w is less than w's existing distance from origin.
+                    If true, relax the distance between w and origin through f */
+                    } else if (w_dist_origin < paths.get(w).distance) {
+                        paths.get(w).distance = w_dist_origin;
+                        if(h.contains(w)){
+                            h.changePriority(w,w_dist_origin);
+                        }
+                    }
+                });
+            }
+        }
     }
 
     /** Returns the length of the shortest path from the origin to destination.
@@ -41,9 +78,10 @@ public class ShortestPaths {
      * Precondition: destination is a node in the graph, and compute(origin)
      * has been called. */
     public double shortestPathLength(Node destination) {
-        // TODO 2 - implement this method to fetch the shortest path length
-        // from the paths data computed by Dijkstra's algorithm.
-        throw new UnsupportedOperationException();
+        if (!paths.containsKey(destination)){
+            return Double.POSITIVE_INFINITY;
+        } else return paths.get(destination).distance;
+
     }
 
     /** Returns a LinkedList of the nodes along the shortest path from origin
@@ -59,7 +97,6 @@ public class ShortestPaths {
         throw new UnsupportedOperationException();
     }
 
-
     /** Inner class representing data used by Dijkstra's algorithm in the
      * process of computing shortest paths from a given source node. */
     class PathData {
@@ -72,7 +109,6 @@ public class ShortestPaths {
             previous = prev;
         }
     }
-
 
     /** Static helper method to open and parse a file containing graph
      * information. Can parse either a basic file or a DB1B CSV file with

@@ -88,6 +88,13 @@ public class Node {
         paths1.put(c,new PathData1(5,b));
 
 
+        Node origin = paths1.entrySet().stream()
+                .filter(e -> e.getValue().previous == null)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+
+        System.out.println(origin);
 
         System.out.println("a neighbors");
         a.getNeighbors().forEach((n,value) -> {

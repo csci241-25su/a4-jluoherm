@@ -91,11 +91,23 @@ public class ShortestPaths {
      * Precondition: destination is a node in the graph, and compute(origin)
      * has been called. */
     public LinkedList<Node> shortestPath(Node destination) {
-        // TODO 3 - implement this method to reconstruct sequence of Nodes
-        // along the shortest path from the origin to destination using the
-        // paths data computed by Dijkstra's algorithm.
-        throw new UnsupportedOperationException();
+        LinkedList<Node> pathToDest = new LinkedList<>();
+        //Get origin
+
+        if (!paths.containsKey(destination)) {
+            return null;
+        } else {
+            Node current = destination;
+
+            while (current != null){
+                pathToDest.addFirst(current);
+                PathData pd = paths.get(current);
+                current = pd.previous;
+            }
+        }
+        return pathToDest;
     }
+
 
     /** Inner class representing data used by Dijkstra's algorithm in the
      * process of computing shortest paths from a given source node. */

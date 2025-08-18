@@ -64,6 +64,7 @@ public class ShortestPaths {
                     If true, relax the distance between w and origin through f */
                     } else if (w_dist_origin < paths.get(w).distance) {
                         paths.get(w).distance = w_dist_origin;
+                        paths.get(w).previous = f;
                         if(h.contains(w)){
                             h.changePriority(w,w_dist_origin);
                         }
@@ -81,7 +82,6 @@ public class ShortestPaths {
         if (!paths.containsKey(destination)){
             return Double.POSITIVE_INFINITY;
         } else return paths.get(destination).distance;
-
     }
 
     /** Returns a LinkedList of the nodes along the shortest path from origin

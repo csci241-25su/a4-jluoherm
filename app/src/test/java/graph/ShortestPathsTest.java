@@ -149,7 +149,8 @@ public class ShortestPathsTest {
     }
 
     @Test
-    //Test shortest path with multiple path to destination
+    //Test shortest path with multiple path to destination,
+    //validate backpointer updated correctly
     public void test06SimpleTest1() {
         Graph g = loadBasicGraph("Simple1.txt");
         System.out.println("-------Test case test06SimpleTest1 Start------- ");

@@ -222,7 +222,7 @@ public class ShortestPathsTest {
         sp.compute(d);
         LinkedList<Node> abPath = sp.shortestPath(c);
         //Expected path size is 5, where path is D->A->E->F->C
-        //D->A->E->F->->B->C is same length but not expected result since we should get to
+        //D->A->E->F->B->C is same length but not expected result since we should get to
         //C first directly via F
         assertEquals(abPath.size(), 5);
         assertEquals(abPath.getFirst(), d);

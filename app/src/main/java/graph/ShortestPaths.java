@@ -178,12 +178,20 @@ public class ShortestPaths {
               Node previous = value.previous;
               System.out.println(n + "\t\t\t" + distance + "\t\t\t" + previous);
           });
+      } else {
+          Node dest = graph.getNode(destCode);
+          double pathLength = sp.shortestPathLength(dest);
+          System.out.println("Shortest path from " + origin + " to " + dest);
 
+          if (pathLength == Double.POSITIVE_INFINITY ) {
+              System.out.println("There is no path from " + origin + " to " + dest);
+          } else {
+              LinkedList<Node> orig_dest_path = sp.shortestPath(dest);
+              System.out.print(orig_dest_path.stream()
+                      .map(Object::toString)
+                      .collect(Collectors.joining("->")));
+              System.out.println("\nPath Length: " + pathLength);
+          }
       }
-
-      // TODO 6:
-      // If destCode was given, print the nodes in the path from
-      // origCode to destCode, followed by the total path length
-      // If no path exists, print a message saying so.
     }
 }

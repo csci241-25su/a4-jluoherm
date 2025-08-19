@@ -2,7 +2,18 @@ package graph;
 /*
  * Author: James Luo-Hermanson
  * Date: 08/16/2025
- * TODO Purpose:
+ * Purpose: This program implements Dijkstra's single-source algorithm to calculate the shortest
+ * path between the origin and each node in a graph, and the shortest path between an origin node
+ * and destination node when a destination node is given. The program take 3-4 command line arguments as inputs,
+ * a file type, file name, origin node, and destination node (optional).
+ *
+ * The program will output the graph statistics, and either a table of the shortest paths from the origin node
+ * to all other reachable nodes, or the nodes in the shortest path from the origin node to the destination node,
+ * and the path length, when the destination node is given. A message will be displayed if the destination node is
+ * not reachable.
+ *
+ * There is a min-Heap overlay to store the Frontier, and to remove the node
+ * with the smallest distance from the origin from the Frontier in O(1) runtime
  */
 
 import java.util.Map;

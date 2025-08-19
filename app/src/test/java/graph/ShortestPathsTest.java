@@ -10,6 +10,7 @@ import java.net.URL;
 import java.io.FileNotFoundException;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -177,6 +178,146 @@ public class ShortestPathsTest {
         assertEquals(sp.shortestPathLength(b), 9.0, 1e-6);
         System.out.print("Shortest path from S to B: ");
         printShortestPath(abPath1);
+    }
+
+    @Test
+    //Test shortest path on larger graph with multiple paths to destination
+    public void test07SimpleTest2() {
+        Graph g = loadBasicGraph("Simple2.txt");
+        System.out.println("-------Test case test07SimpleTest2 Start------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node d = g.getNode("D");
+        Node e = g.getNode("E");
+        sp.compute(d);
+        //Test shortest path to E, which is D->A->E length 5
+        LinkedList<Node> abPath = sp.shortestPath(e);
+        assertEquals(abPath.size(), 3);
+        assertEquals(abPath.getFirst(), d);
+        assertEquals(abPath.getLast(),  e);
+        assertEquals(sp.shortestPathLength(e), 5.0, 1e-6);
+        System.out.print("Shortest path from D to E: ");
+        printShortestPath(abPath);
+
+        //Test shortest path to G, which is D->A->E->F->I->J->G length 12
+        Node gNode = g.getNode("G");
+        LinkedList<Node> abPath1 = sp.shortestPath(gNode);
+        assertEquals(abPath1.size(), 7);
+        assertEquals(abPath1.getFirst(), d);
+        assertEquals(abPath1.getLast(),  gNode);
+        assertEquals(sp.shortestPathLength(gNode), 12, 1e-6);
+        System.out.print("Shortest path from D to G: ");
+        printShortestPath(abPath1);
+    }
+
+    @Test
+    //Test expected shortest path when two choice of two equal weight subpaths exist
+    public void test08SimpleTest2() {
+        Graph g = loadBasicGraph("Simple2.txt");
+        System.out.println("-------Test case test08SimpleTest2 Start------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node d = g.getNode("D");
+        Node c = g.getNode("C");
+        sp.compute(d);
+        LinkedList<Node> abPath = sp.shortestPath(c);
+        //Expected path size is 5, where path is D->A->E->F->C
+        //D->A->E->F->->B->C is same length but not expected result since we should get to
+        //C first directly via F
+        assertEquals(abPath.size(), 5);
+        assertEquals(abPath.getFirst(), d);
+        assertEquals(abPath.getLast(),  c);
+        assertEquals(sp.shortestPathLength(c), 11, 1e-6);
+        System.out.print("Shortest path from D to C: ");
+        printShortestPath(abPath);
+    }
+
+    @Test
+    //Test FakeCanada graph
+    public void test09FakeCanada() {
+        Graph g = loadBasicGraph("FakeCanada.txt");
+        System.out.println("-------Test case test09FakeCanada Start------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node yul = g.getNode("YUL");
+        sp.compute(yul);
+        //Test that distance to YUL is 0.0
+        LinkedList<Node> abPath = sp.shortestPath(yul);
+        assertEquals(abPath.size(), 1);
+        assertEquals(abPath.getFirst(), yul);
+        assertEquals(abPath.getLast(),  yul);
+        assertEquals(sp.shortestPathLength(yul), 0.0, 1e-6);
+        System.out.print("Shortest path from YUL to YUL: ");
+        printShortestPath(abPath);
+
+        //Test shortest path to YVR, which is YUL->YOW->YYZ->YYC->YVR length 12
+        Node yvr = g.getNode("YVR");
+        LinkedList<Node> abPath1 = sp.shortestPath(yvr);
+        assertEquals(abPath1.size(), 5);
+        assertEquals(abPath1.getFirst(), yul);
+        assertEquals(abPath1.getLast(),  yvr);
+        assertEquals(sp.shortestPathLength(yvr), 2423, 1e-6);
+        System.out.print("Shortest path from YUL to YVR: ");
+        printShortestPath(abPath1);
+    }
+
+    @Test
+    //Test shortest path between inner nodes in graph, to YUL from YVR, which is YVR->YUL length 2295
+    public void test10FakeCanada() {
+        Graph g = loadBasicGraph("FakeCanada.txt");
+        System.out.println("-------Test case test10FakeCanada Start------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node yvr = g.getNode("YVR");
+        Node yul = g.getNode("YUL");
+        sp.compute(yvr);
+        //Test that distance to YUL is 0.0
+        LinkedList<Node> abPath = sp.shortestPath(yul);
+        assertEquals(abPath.size(), 2);
+        assertEquals(abPath.getFirst(), yvr);
+        assertEquals(abPath.getLast(),  yul);
+        assertEquals(sp.shortestPathLength(yul), 2295.00, 1e-6);
+        System.out.print("Shortest path from YVR to YUL: ");
+        printShortestPath(abPath);
+    }
+
+    @Test
+    //Test shortest path between obstacles, obstacle is a node
+    public void test11Test3() {
+        Graph g = loadBasicGraph("Test3.txt");
+        System.out.println("-------Test case test11Test3------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node a = g.getNode("A");
+        Node p = g.getNode("P");
+        sp.compute(a);
+        LinkedList<Node> abPath = sp.shortestPath(p);
+        assertEquals(abPath.size(), 7);
+        assertEquals(abPath.getFirst(), a);
+        assertEquals(abPath.getLast(),  p);
+        assertEquals(sp.shortestPathLength(p), 6, 1e-6);
+        System.out.print("Shortest path from A to P: ");
+        printShortestPath(abPath);
+    }
+
+    @Test
+    //Test shortest path between obstacles when cost of most direct path is greater than indirect
+    //Set E->F cost to be 100
+    public void test12Test4() {
+        Graph g = loadBasicGraph("Test4.txt");
+        System.out.println("-------Test case test12Test4------- ");
+        g.report();
+        ShortestPaths sp = new ShortestPaths();
+        Node a = g.getNode("A");
+        Node p = g.getNode("P");
+        sp.compute(a);
+        LinkedList<Node> abPath = sp.shortestPath(p);
+        assertEquals(abPath.size(), 9);
+        assertEquals(abPath.getFirst(), a);
+        assertEquals(abPath.getLast(),  p);
+        assertEquals(sp.shortestPathLength(p), 8, 1e-6);
+        System.out.print("Shortest path from A to P: ");
+        printShortestPath(abPath);
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.stream.Collectors;
 
 /** Provides an implementation of Dijkstra's single-source shortest paths
  * algorithm.
@@ -166,13 +167,19 @@ public class ShortestPaths {
       }
       graph.report();
 
+      ShortestPaths sp = new ShortestPaths();
+      Node origin = graph.getNode(origCode);
+      sp.compute(origin);
 
-      // TODO 4: create a ShortestPaths object, use it to compute shortest
-      // paths data from the origin node given by origCode.
+      if (destCode == null){
+          System.out.print("Node\tDist-to-orgin\tPrevious\n");
+          sp.paths.forEach((n, value) -> {
+              double distance = value.distance;
+              Node previous = value.previous;
+              System.out.println(n + "\t\t\t" + distance + "\t\t\t" + previous);
+          });
 
-      // TODO 5:
-      // If destCode was not given, print each reachable node followed by the
-      // length of the shortest path to it from the origin.
+      }
 
       // TODO 6:
       // If destCode was given, print the nodes in the path from

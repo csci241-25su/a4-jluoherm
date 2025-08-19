@@ -88,6 +88,7 @@ public class ShortestPathsTest {
         sp.compute(a);
         Node c = g.getNode("C");
         LinkedList<Node> abPath = sp.shortestPath(c);
+        assertEquals(List.of("A","C"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 2);
         assertEquals(abPath.getFirst(), a);
         assertEquals(abPath.getLast(),  c);
@@ -105,6 +106,7 @@ public class ShortestPathsTest {
         Node a = g.getNode("A");
         sp.compute(a);
         LinkedList<Node> abPath = sp.shortestPath(a);
+        assertEquals(List.of("A"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 1);
         assertEquals(abPath.getFirst(), a);
         assertEquals(abPath.getLast(),  a);
@@ -142,16 +144,18 @@ public class ShortestPathsTest {
         Node s = g.getNode("S");
         sp.compute(s);
         LinkedList<Node> abPath = sp.shortestPath(s);
+        assertEquals(List.of("S"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 1);
         assertEquals(abPath.getFirst(), s);
         assertEquals(abPath.getLast(),  s);
         assertEquals(sp.shortestPathLength(s), 0.0, 1e-6);
         printShortestPath(abPath);
+
     }
 
     @Test
     //Test shortest path with multiple path to destination,
-    //validate backpointer updated correctly
+    //Validate backpointer updated correctly
     public void test06SimpleTest1() {
         Graph g = loadBasicGraph("Simple1.txt");
         System.out.println("-------Test case test06SimpleTest1 Start------- ");
@@ -162,6 +166,7 @@ public class ShortestPathsTest {
         sp.compute(s);
         //Test shortest path to D, which is S->C->D length 7
         LinkedList<Node> abPath = sp.shortestPath(d);
+        assertEquals(List.of("S","C","D"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 3);
         assertEquals(abPath.getFirst(), s);
         assertEquals(abPath.getLast(),  d);
@@ -172,6 +177,7 @@ public class ShortestPathsTest {
         //Test shortest path to B, which is S->C->A->B length 9
         Node b = g.getNode("B");
         LinkedList<Node> abPath1 = sp.shortestPath(b);
+        assertEquals(List.of("S","C","A","B"),abPath1.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath1.size(), 4);
         assertEquals(abPath1.getFirst(), s);
         assertEquals(abPath1.getLast(),  b);
@@ -192,6 +198,7 @@ public class ShortestPathsTest {
         sp.compute(d);
         //Test shortest path to E, which is D->A->E length 5
         LinkedList<Node> abPath = sp.shortestPath(e);
+        assertEquals(List.of("D","A","E"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 3);
         assertEquals(abPath.getFirst(), d);
         assertEquals(abPath.getLast(),  e);
@@ -202,6 +209,7 @@ public class ShortestPathsTest {
         //Test shortest path to G, which is D->A->E->F->I->J->G length 12
         Node gNode = g.getNode("G");
         LinkedList<Node> abPath1 = sp.shortestPath(gNode);
+        assertEquals(List.of("D","A","E","F","I","J","G"),abPath1.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath1.size(), 7);
         assertEquals(abPath1.getFirst(), d);
         assertEquals(abPath1.getLast(),  gNode);
@@ -224,6 +232,7 @@ public class ShortestPathsTest {
         //Expected path size is 5, where path is D->A->E->F->C
         //D->A->E->F->B->C is same length but not expected result since we should get to
         //C first directly via F
+        assertEquals(List.of("D","A","E","F","C"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 5);
         assertEquals(abPath.getFirst(), d);
         assertEquals(abPath.getLast(),  c);
@@ -243,6 +252,7 @@ public class ShortestPathsTest {
         sp.compute(yul);
         //Test that distance to YUL is 0.0
         LinkedList<Node> abPath = sp.shortestPath(yul);
+        assertEquals(List.of("YUL"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 1);
         assertEquals(abPath.getFirst(), yul);
         assertEquals(abPath.getLast(),  yul);
@@ -253,6 +263,7 @@ public class ShortestPathsTest {
         //Test shortest path to YVR, which is YUL->YOW->YYZ->YYC->YVR length 12
         Node yvr = g.getNode("YVR");
         LinkedList<Node> abPath1 = sp.shortestPath(yvr);
+        assertEquals(List.of("YUL","YOW","YYZ","YYC","YVR"),abPath1.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath1.size(), 5);
         assertEquals(abPath1.getFirst(), yul);
         assertEquals(abPath1.getLast(),  yvr);
@@ -271,8 +282,8 @@ public class ShortestPathsTest {
         Node yvr = g.getNode("YVR");
         Node yul = g.getNode("YUL");
         sp.compute(yvr);
-        //Test that distance to YUL is 0.0
         LinkedList<Node> abPath = sp.shortestPath(yul);
+        assertEquals(List.of("YVR","YUL"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 2);
         assertEquals(abPath.getFirst(), yvr);
         assertEquals(abPath.getLast(),  yul);
@@ -292,6 +303,7 @@ public class ShortestPathsTest {
         Node p = g.getNode("P");
         sp.compute(a);
         LinkedList<Node> abPath = sp.shortestPath(p);
+        assertEquals(List.of("A","E","F","J","K","O","P"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 7);
         assertEquals(abPath.getFirst(), a);
         assertEquals(abPath.getLast(),  p);
@@ -312,6 +324,7 @@ public class ShortestPathsTest {
         Node p = g.getNode("P");
         sp.compute(a);
         LinkedList<Node> abPath = sp.shortestPath(p);
+        assertEquals(List.of("A","E","I","M","N","J","K","O","P"),abPath.stream().map(Node::getId).collect(Collectors.toList()));
         assertEquals(abPath.size(), 9);
         assertEquals(abPath.getFirst(), a);
         assertEquals(abPath.getLast(),  p);

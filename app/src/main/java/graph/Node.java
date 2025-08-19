@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /** A Node class for a adjacency-list representation of a graph.  Nodes are
  * identified by a unique String identifier and edges are stored as a Neighbor
@@ -33,7 +34,7 @@ public class Node {
     }
 
     /** Add an edge to neighbor with the given weight. If such an edge already
-     * existed, upate its weight. */
+     * existed, update its weight. */
     public void addNeighbor(Node neighbor, double weight) {
         neighbors.put(neighbor, weight);
     }
@@ -58,4 +59,5 @@ public class Node {
     public int hashCode() {
       return id.hashCode();
     }
+
 }
